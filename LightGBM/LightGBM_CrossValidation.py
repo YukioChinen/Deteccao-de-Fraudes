@@ -121,12 +121,14 @@ overall_cm = confusion_matrix(y_true_all, y_pred_optimal)
 # Gráficos finais
 plt.figure(figsize=(12, 10))
 
+# 1. Matriz de Confusão
 plt.subplot(2, 2, 1)
 sns.heatmap(overall_cm, annot=True, fmt='d', cmap='Blues')
 plt.title(f'Matriz de Confusão (threshold={overall_optimal_threshold:.3f})')
 plt.xlabel('Predito')
 plt.ylabel('Real')
 
+# 2. Curva ROC
 plt.subplot(2, 2, 2)
 fpr, tpr, _ = roc_curve(y_true_all, y_pred_proba_all)
 plt.plot(fpr, tpr, label=f'AUC = {overall_auc:.3f}')
@@ -136,6 +138,7 @@ plt.ylabel('Taxa de Verdadeiros Positivos')
 plt.title('Curva ROC')
 plt.legend()
 
+# 3. Curva Precision-Recall
 plt.subplot(2, 2, 3)
 plt.plot(overall_recall, overall_precision, label=f'AP = {overall_ap:.3f}')
 plt.axvline(overall_recall[overall_optimal_idx], color='r', linestyle='--', label=f'Threshold = {overall_optimal_threshold:.3f}')
@@ -144,13 +147,25 @@ plt.ylabel('Precision')
 plt.title('Curva Precision-Recall')
 plt.legend()
 
+# 4. Importância das features
+plt.subplot(2, 2, 4)
+importance_df = pd.DataFrame({
+    'feature': model.feature_name(),
+    'importance': model.feature_importance(importance_type='split')
+})
+top_features = importance_df.sort_values(by='importance', ascending=False).head(10)
+
+sns.barplot(x='importance', y='feature', data=top_features, palette='viridis')
+plt.title('Importância das Features (Top 10)')
+plt.xlabel('Frequência de uso')
+
 # Criar diretório de saída
 output_dir = 'LightGBM'
 os.makedirs(output_dir, exist_ok=True)
 
 # Salvar figura
 plt.tight_layout()
-plt.savefig(os.path.join(output_dir, 'crossval_lightgbm_results.png'))
+plt.savefig(os.path.join(output_dir, 'lightgbm_crossvalidation_results.png'))
 plt.show()
 
 # Resultados finais

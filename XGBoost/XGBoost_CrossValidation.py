@@ -110,6 +110,17 @@ plt.ylabel('Precision')
 plt.title('Curva Precision-Recall')
 plt.legend()
 
+# 4. Importância das features
+plt.subplot(2, 2, 4)
+importance_dict = model.get_score(importance_type='weight')
+features = list(importance_dict.keys())
+importances = list(importance_dict.values())
+sorted_idx = np.argsort(importances)[-10:]  # Top 10
+
+plt.barh(range(len(sorted_idx)), np.array(importances)[sorted_idx])
+plt.yticks(range(len(sorted_idx)), np.array(features)[sorted_idx])
+plt.title('Importância das Features (Top 10)')
+
 # Criar diretório de saída
 output_dir = 'XGBoost'
 os.makedirs(output_dir, exist_ok=True)

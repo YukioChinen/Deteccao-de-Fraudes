@@ -11,6 +11,9 @@ import seaborn as sns
 import time
 from sklearn.preprocessing import StandardScaler
 
+import os
+os.environ["LOKY_MAX_CPU_COUNT"] = "8"
+
 # 1. Carregar os dados
 print("Carregando dados...")
 start_time = time.time()
