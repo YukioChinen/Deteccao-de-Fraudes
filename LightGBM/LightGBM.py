@@ -11,6 +11,9 @@ import seaborn as sns
 import time
 from sklearn.preprocessing import StandardScaler
 
+import os
+os.environ["LOKY_MAX_CPU_COUNT"] = "8"
+
 # 1. Carregar os dados
 print("Carregando dados...")
 start_time = time.time()
@@ -169,8 +172,13 @@ plt.subplot(2, 2, 4)
 lgb.plot_importance(model, max_num_features=10, importance_type='gain', ax=plt.gca())
 plt.title('Importância das Features')
 
+# Criar diretório de saída
+output_dir = 'LightGBM'
+os.makedirs(output_dir, exist_ok=True)
+
+# Salvar figura
 plt.tight_layout()
-plt.savefig('lightgbm_results.png')
+plt.savefig(os.path.join(output_dir, 'lightgbm_results.png'))
 plt.show()
 
 # Análise de erros - examinar falsos positivos e falsos negativos
@@ -181,7 +189,7 @@ print(f"\nNúmero de falsos positivos: {len(false_positives)}")
 print(f"Número de falsos negativos: {len(false_negatives)}")
 
 # Salvar o modelo
-model.save_model('lightgbm_fraud_model.txt')
+model.save_model(os.path.join(output_dir, 'lightgbm_fraud_model.txt'))
 print("Modelo salvo em 'lightgbm_fraud_model.txt'")
 
 """

@@ -110,11 +110,11 @@ plt.ylabel('Precision')
 plt.title('Curva Precision-Recall')
 plt.legend()
 
-output_dir = 'Deteccao-de-fraudes/XGBoost'
+# Criar diretório de saída
+output_dir = 'XGBoost'
 os.makedirs(output_dir, exist_ok=True)
 
-output_dir = 'Deteccao-de-Fraudes/XGBoost'
-
+# Salvar figura
 plt.tight_layout()
 plt.savefig(os.path.join(output_dir, 'xgboost_crossvalidation_results.png'))
 plt.show()

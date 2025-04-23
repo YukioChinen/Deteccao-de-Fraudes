@@ -43,7 +43,8 @@ auc_scores = []
 ap_scores = []
 f1_scores = []
 
-for train_index, test_index in skf.split(X, y):
+for fold, (train_index, test_index) in enumerate(skf.split(X, y), 1):
+    print(f"\nTreinando fold {fold}...")
     X_train, X_test = X.iloc[train_index], X.iloc[test_index]
     y_train, y_test = y.iloc[train_index], y.iloc[test_index]
 
@@ -143,8 +144,13 @@ plt.ylabel('Precision')
 plt.title('Curva Precision-Recall')
 plt.legend()
 
+# Criar diretório de saída
+output_dir = 'LightGBM'
+os.makedirs(output_dir, exist_ok=True)
+
+# Salvar figura
 plt.tight_layout()
-plt.savefig('crossval_lightgbm_results.png')
+plt.savefig(os.path.join(output_dir, 'crossval_lightgbm_results.png'))
 plt.show()
 
 # Resultados finais
@@ -158,3 +164,7 @@ print(f"Threshold ótimo total: {overall_optimal_threshold:.4f}")
 
 print("\nClassification Report Geral:")
 print(classification_report(y_true_all, y_pred_optimal))
+
+# Salvar o modelo
+model.save_model(os.path.join(output_dir, 'lightgbm_crossvalidation_model.json'))
+print("Modelo salvo em 'lightgbm_crossvalidation_model.json'")

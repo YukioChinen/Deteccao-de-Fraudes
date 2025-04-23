@@ -160,9 +160,11 @@ plt.subplot(2, 2, 4)
 xgb.plot_importance(model, max_num_features=10, importance_type='gain', ax=plt.gca())
 plt.title('Importância das Features')
 
-output_dir = 'Deteccao-de-fraudes/XGBoost'
+# Criar diretório de saída
+output_dir = 'XGBoost'
 os.makedirs(output_dir, exist_ok=True)
 
+# Salvar figura
 plt.tight_layout()
 plt.savefig(os.path.join(output_dir, 'xgboost_results.png'))
 plt.show()
